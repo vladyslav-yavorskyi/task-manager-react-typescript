@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ITodo } from '../models';
-import { db } from '../firebase';
+import { db } from '../.firebase';
 import { doc, runTransaction } from 'firebase/firestore';
 import { checked_icon, del_icon } from '../icons';
 import { Modal, ModalContents, ModalOpenButton } from '../context/ModalContext';

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { AxiosError } from 'axios';
 import { ITodo } from './models';
 import { collection, getDocs, orderBy, query } from 'firebase/firestore';
-import { db } from './firebase';
+import { db } from './.firebase';
 
 function useTodos() {
   const [data, setData] = useState<ITodo[]>([]);

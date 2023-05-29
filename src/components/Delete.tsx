@@ -1,6 +1,6 @@
 import { deleteDoc, doc } from 'firebase/firestore';
 import React from 'react';
-import { db } from '../firebase';
+import { db } from '../.firebase';
 import { ModalDismissButton } from '../context/ModalContext';
 
 function Delete({ id }: any) {
