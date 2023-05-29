@@ -43,11 +43,13 @@ function Form() {
       />
       <button
         type="submit"
-        className="text-white font-bold bg-green-400 py-2 px-4 rounded"
+        className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 border border-green-700 rounded mx-3 mb-3"
       >
         Add
       </button>
-      {error && <p>Write something</p>}
+      {error && (
+        <p className="text-red-600 font-bold text-center">Write something!</p>
+      )}
     </form>
   );
 }

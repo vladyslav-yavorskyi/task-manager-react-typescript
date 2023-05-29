@@ -10,7 +10,7 @@ function TaskPage() {
 
   return (
     <div className="container mx-auto max-w-2xl pt-5">
-      <h1 className="text-center font-bold text-5xl mt-5">TO-DO App</h1>
+      <h1 className="text-center font-bold text-5xl my-10">TO-DO App</h1>
 
       {error && <p>Something went wrong.... :( {error}</p>}
 
