@@ -13,6 +13,7 @@ interface TaskProps {
 function Task({ task }: TaskProps) {
   const [done, setDone] = useState<boolean>(task.completed);
   const todoRef = doc(db, 'todo', task.id);
+  console.log(task.id);
 
   const clickHandler = async () => {
     try {
@@ -55,7 +56,7 @@ function Task({ task }: TaskProps) {
             </button>
           </ModalOpenButton>
           <ModalContents title="Delete task">
-            <Delete />
+            <Delete id={task.id} />
           </ModalContents>
         </Modal>
       </div>
