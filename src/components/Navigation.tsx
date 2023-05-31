@@ -5,6 +5,7 @@ import { Modal, ModalContents } from '../context/ModalContext';
 import { ModalOpenButton } from '../context/ModalContext';
 import SingUp from './SingUp';
 import { auth } from '../.firebase';
+import SignIn from './SignIn';
 
 function Navigation() {
   const user = useContext(AuthContext);
@@ -27,14 +28,24 @@ function Navigation() {
             </Link>
           </>
         ) : (
-          <Modal>
-            <ModalOpenButton>
-              <button className="ml-2">Sign up</button>
-            </ModalOpenButton>
-            <ModalContents title="Sign up">
-              <SingUp />
-            </ModalContents>
-          </Modal>
+          <>
+            <Modal>
+              <ModalOpenButton>
+                <button className="ml-2">Sign in</button>
+              </ModalOpenButton>
+              <ModalContents title="Sign in">
+                <SignIn />
+              </ModalContents>
+            </Modal>
+            <Modal>
+              <ModalOpenButton>
+                <button className="ml-2">Sign up</button>
+              </ModalOpenButton>
+              <ModalContents title="Sign up">
+                <SingUp />
+              </ModalContents>
+            </Modal>
+          </>
         )}
       </span>
     </nav>

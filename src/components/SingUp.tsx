@@ -1,25 +1,10 @@
 import React, { useRef } from 'react';
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from 'firebase/auth';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../.firebase';
 
 function SingUp() {
   const email = useRef<HTMLInputElement>(null);
   const password = useRef<HTMLInputElement>(null);
-
-  const signIn = async () => {
-    try {
-      await signInWithEmailAndPassword(
-        auth,
-        email.current!.value,
-        password.current!.value
-      );
-    } catch (e) {
-      console.error(e);
-    }
-  };
 
   const createAccount = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -49,7 +34,7 @@ function SingUp() {
         className="outline-none py-2 px-4"
         placeholder="Enter your password..."
         ref={password}
-        type="text"
+        type="password"
         id="password"
       />
       <button
