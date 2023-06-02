@@ -8,7 +8,7 @@ import { auth } from '../.firebase';
 import SignIn from './SignIn';
 
 function Navigation() {
-  const user = useContext(AuthContext);
+  const { isSignedIn } = useContext(AuthContext);
   const signOut = async () => {
     await auth.signOut();
   };
@@ -18,7 +18,7 @@ function Navigation() {
       <span>TO-DO APP</span>
       <span>
         <Link to="/">About</Link>
-        {user ? (
+        {isSignedIn ? (
           <>
             <Link to="/tasks" className="mx-2">
               Your tasks

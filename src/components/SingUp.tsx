@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../.firebase';
+import { auth, db } from '../.firebase';
+import { doc, setDoc } from 'firebase/firestore';
 
 function SingUp() {
   const email = useRef<HTMLInputElement>(null);
@@ -9,11 +10,18 @@ function SingUp() {
   const createAccount = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      await createUserWithEmailAndPassword(
+      const response = await createUserWithEmailAndPassword(
         auth,
         email.current!.value,
         password.current!.value
       );
+      console.log(response);
+      const account = {
+        userID: response.user.uid,
+        tasks: [],
+      };
+
+      await setDoc(doc(db, 'accounts', account.userID), account);
     } catch (e) {
       console.error(e);
     }

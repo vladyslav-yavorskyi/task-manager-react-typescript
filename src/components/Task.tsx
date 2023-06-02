@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import { useContext, useState } from 'react';
 import { ITodo } from '../models';
 import { db } from '../.firebase';
 import { doc, runTransaction } from 'firebase/firestore';
 import { checked_icon, del_icon } from '../icons';
 import { Modal, ModalContents, ModalOpenButton } from '../context/ModalContext';
 import Delete from './Delete';
+import { AuthContext } from '../context/AuthContext';
 
 interface TaskProps {
   task: ITodo;
@@ -12,8 +13,9 @@ interface TaskProps {
 
 function Task({ task }: TaskProps) {
   const [done, setDone] = useState<boolean>(task.completed);
-  const todoRef = doc(db, 'todo', task.id);
-  console.log(task.id);
+  const { currentUser: user } = useContext(AuthContext);
+
+  const todoRef = doc(db, 'accounts', String(user?.uid));
 
   const clickHandler = async () => {
     try {
@@ -23,9 +25,17 @@ function Task({ task }: TaskProps) {
           return 'document doesnt exist!';
         }
 
-        const newValue = !todoDoc.data().completed;
-        transaction.update(todoRef, { completed: newValue });
-        setDone(newValue);
+        const data = todoDoc.data().tasks;
+
+        const getIndex = data.findIndex(
+          (obj: any) => obj.idTask === task.idTask
+        );
+        data[getIndex].completed = !data[getIndex].completed;
+
+        transaction.update(todoRef, {
+          tasks: [...data],
+        });
+        setDone(data[getIndex].completed);
       });
     } catch (e) {
       console.error(e);
@@ -56,7 +66,7 @@ function Task({ task }: TaskProps) {
             </button>
           </ModalOpenButton>
           <ModalContents title="Delete task">
-            <Delete id={task.id} />
+            <Delete id={task.idTask} />
           </ModalContents>
         </Modal>
       </div>

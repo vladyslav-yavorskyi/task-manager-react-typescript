@@ -1,35 +1,37 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { AxiosError } from 'axios';
 import { ITodo } from './models';
-import { collection, getDocs, orderBy, query } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 import { db } from './.firebase';
+import { AuthContext } from './context/AuthContext';
 
 function useTodos() {
   const [data, setData] = useState<ITodo[]>([]);
   const [error, setError] = useState('');
+  const { currentUser: user } = useContext(AuthContext);
 
-  const collectionRef = collection(db, 'todo');
-
-  const getData = async () => {
-    try {
-      setError('');
-      const q = query(collectionRef, orderBy('time'));
-      const response = await getDocs(q);
-      const newData = response.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      })) as ITodo[];
-
-      setData(newData);
-    } catch (e: unknown) {
-      const error = e as AxiosError;
-      setError(error.message);
-    }
-  };
   useEffect(() => {
+    const getData = async () => {
+      try {
+        setError('');
+        const collectionRef = collection(db, 'accounts');
+        const response = await getDocs(collectionRef);
+
+        const newData = response.docs.map((doc) => ({
+          ...doc.data(),
+        }));
+
+        setData(newData.find((acc) => acc?.userID === user?.uid)?.tasks);
+      } catch (e: unknown) {
+        const error = e as AxiosError;
+        setError(error.message);
+      }
+    };
+
     getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [user?.uid]);
+
+  console.log(data);
 
   return { data, error };
 }

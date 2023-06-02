@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { db } from '../.firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, updateDoc, Timestamp, arrayUnion } from 'firebase/firestore';
+import { AuthContext } from '../context/AuthContext';
 
-function Form() {
+function CreateTask() {
   const [value, setValue] = useState<string>('');
   const [error, setError] = useState<string>('');
+  const { currentUser: user } = useContext(AuthContext);
 
   const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -14,12 +16,19 @@ function Form() {
       return;
     }
 
+    const userRef = doc(db, `accounts/${user?.uid}`);
+    console.log(userRef);
+
     try {
-      const collectionRef = await collection(db, 'todo');
-      await addDoc(collectionRef, {
-        title: value,
-        completed: false,
-        time: serverTimestamp(),
+      // const collectionRef = await collection(db, `accounts/${user?.uid}/todos`);
+      // await addDoc(userRef);
+      await updateDoc(userRef, {
+        tasks: arrayUnion({
+          idTask: new Date(Timestamp.now().seconds * 1000).toLocaleString(),
+          title: value,
+          completed: false,
+          time: Timestamp.now(),
+        }),
       });
       setValue('');
       window.location.reload();
@@ -54,4 +63,4 @@ function Form() {
   );
 }
 
-export default Form;
+export default CreateTask;
