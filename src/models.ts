@@ -1,9 +1,6 @@
 export interface ITodo {
-  idTask: string;
+  idTask?: string;
   title: string;
   completed: boolean;
-  time: {
-    seconds: number;
-    nanoseconds: number;
-  };
+  time: string;
 }

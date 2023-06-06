@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { ITodo } from '../models';
-import { db } from '../.firebase';
-import { doc, runTransaction } from 'firebase/firestore';
+import { db } from '../app/.firebase';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { checked_icon, del_icon } from '../icons';
 import { Modal, ModalContents, ModalOpenButton } from '../context/ModalContext';
 import Delete from './Delete';
@@ -15,28 +15,17 @@ function Task({ task }: TaskProps) {
   const [done, setDone] = useState<boolean>(task.completed);
   const { currentUser: user } = useContext(AuthContext);
 
-  const todoRef = doc(db, 'accounts', String(user?.uid));
-
   const clickHandler = async () => {
     try {
-      await runTransaction(db, async (transaction) => {
-        const todoDoc = await transaction.get(todoRef);
-        if (!todoDoc.exists()) {
-          return 'document doesnt exist!';
-        }
+      const taskRef = doc(db, `accounts/${user?.uid}/tasks/${task.idTask}`);
 
-        const data = todoDoc.data().tasks;
+      const getCompleted = !(await getDoc(taskRef)).data()?.completed;
 
-        const getIndex = data.findIndex(
-          (obj: any) => obj.idTask === task.idTask
-        );
-        data[getIndex].completed = !data[getIndex].completed;
-
-        transaction.update(todoRef, {
-          tasks: [...data],
-        });
-        setDone(data[getIndex].completed);
+      await updateDoc(taskRef, {
+        completed: getCompleted,
       });
+
+      setDone(getCompleted);
     } catch (e) {
       console.error(e);
     }
@@ -48,9 +37,7 @@ function Task({ task }: TaskProps) {
   return (
     <div className="container flex border-2 justify-between border-black py-1 rounded w-63 my-2 mx-4">
       <h1 className={textClasses.join(' ')}>{task.title}</h1>
-      <p className={textClasses.join(' ')}>
-        {new Date(task.time.seconds * 1000).toLocaleString()}
-      </p>
+      <p className={textClasses.join(' ')}>{task.time}</p>
       <div className="buttons">
         <button
           type="button"
@@ -66,7 +53,7 @@ function Task({ task }: TaskProps) {
             </button>
           </ModalOpenButton>
           <ModalContents title="Delete task">
-            <Delete id={task.idTask} />
+            <Delete id={String(task.idTask)} />
           </ModalContents>
         </Modal>
       </div>

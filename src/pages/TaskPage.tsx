@@ -1,21 +1,23 @@
-import useTodos from '../todos';
 import Task from '../components/Task';
 import { Modal } from '../context/ModalContext';
 import CreateTask from '../components/CreateTask';
 import { ModalOpenButton, ModalContents } from '../context/ModalContext';
+import { useFetchAllTasksQuery } from '../todoSlice';
+import { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 
 function TaskPage() {
-  const { data, error } = useTodos();
+  const { currentUser: user } = useContext(AuthContext);
+  const { data, isLoading, isError } = useFetchAllTasksQuery(user.uid);
 
   return (
     <div className="container mx-auto max-w-2xl pt-5">
       <h1 className="text-center font-bold text-5xl my-10">TO-DO App</h1>
       <>
-        {error && <p>Something went wrong.... :( {error}</p>}
+        {isError && <p>Something went wrong.... :( {isError}</p>}
 
-        {data?.map((task) => (
-          <Task task={task} key={task.idTask} />
-        ))}
+        {!isLoading &&
+          data?.map((task) => <Task task={task} key={task.idTask} />)}
       </>
 
       <Modal>

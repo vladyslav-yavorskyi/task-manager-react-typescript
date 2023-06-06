@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth, db } from '../.firebase';
+import { auth, db } from '../app/.firebase';
 import { doc, setDoc } from 'firebase/firestore';
 
 function SingUp() {

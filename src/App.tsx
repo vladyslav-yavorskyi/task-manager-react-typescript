@@ -9,8 +9,6 @@ import { CircularProgress } from '@mui/material';
 export function App() {
   const user = useContext(AuthContext);
 
-  console.log(user?.pending);
-
   return (
     <>
       <div>

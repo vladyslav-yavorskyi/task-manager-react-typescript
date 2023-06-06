@@ -4,7 +4,7 @@ import { AuthContext } from '../context/AuthContext';
 import { Modal, ModalContents } from '../context/ModalContext';
 import { ModalOpenButton } from '../context/ModalContext';
 import SingUp from './SingUp';
-import { auth } from '../.firebase';
+import { auth } from '../app/.firebase';
 import SignIn from './SignIn';
 
 function Navigation() {

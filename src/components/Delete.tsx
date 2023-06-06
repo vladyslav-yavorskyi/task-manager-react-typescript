@@ -1,35 +1,15 @@
-import { doc, runTransaction } from 'firebase/firestore';
-import { db } from '../.firebase';
 import { ModalDismissButton } from '../context/ModalContext';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { ITodo } from '../models';
+import { useDeleteTaskMutation } from '../todoSlice';
 
-function Delete({ id }: any) {
+function Delete({ id }: { id: string }) {
   const { currentUser: user } = useContext(AuthContext);
-  const todoRef = doc(db, 'accounts', String(user?.uid));
+  const [deleteTask] = useDeleteTaskMutation();
 
-  const deleteHandler = async () => {
-    try {
-      await runTransaction(db, async (transaction) => {
-        const todoDoc = await transaction.get(todoRef);
-        if (!todoDoc.exists()) {
-          return 'document doesnt exist!';
-        }
-
-        const data = todoDoc.data().tasks;
-
-        const newData = data.filter((el: ITodo) => el.idTask !== id);
-        console.log(newData);
-
-        transaction.update(todoRef, {
-          tasks: [...newData],
-        });
-      });
-      window.location.reload();
-    } catch (e) {
-      console.error(e);
-    }
+  const deleteHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    deleteTask({ user: user?.uid, id });
   };
 
   return (
