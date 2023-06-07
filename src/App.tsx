@@ -10,22 +10,20 @@ export function App() {
   const user = useContext(AuthContext);
 
   return (
-    <>
-      <div>
-        {!user?.pending ? (
-          <>
-            <Navigation />
-            <Routes>
-              <Route path="/tasks" element={<TaskPage />} />
-              <Route path="/" element={<AboutPage />} />
-            </Routes>
-          </>
-        ) : (
-          <div className="grid place-items-center h-screen">
-            <CircularProgress />
-          </div>
-        )}
-      </div>
-    </>
+    <div>
+      {!user?.pending ? (
+        <>
+          <Navigation />
+          <Routes>
+            <Route path="/tasks" element={<TaskPage />} />
+            <Route path="/" element={<AboutPage />} />
+          </Routes>
+        </>
+      ) : (
+        <div className="grid place-items-center h-screen">
+          <CircularProgress />
+        </div>
+      )}
+    </div>
   );
 }

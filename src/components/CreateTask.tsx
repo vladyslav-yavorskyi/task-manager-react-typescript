@@ -2,10 +2,13 @@ import React, { useContext, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useCreateNewTaskMutation } from '../todoSlice';
 import { ModalDismissButton } from '../context/ModalContext';
+import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
+import dayjs, { Dayjs } from 'dayjs';
 
 function CreateTask() {
   const [value, setValue] = useState<string>('');
   const [error, setError] = useState<string>('');
+  const [date, setDate] = useState<Dayjs | null>(dayjs(Date.now()));
   const { currentUser: user } = useContext(AuthContext);
   const [createNewTask] = useCreateNewTaskMutation();
 
@@ -17,10 +20,13 @@ function CreateTask() {
       return;
     }
 
-    createNewTask({ user: user?.uid, value });
+    createNewTask({
+      user: user?.uid,
+      value,
+      date: dayjs(date).format('DD-MM-YYYY'),
+    });
 
     setValue('');
-    // window.location.reload();
   };
 
   const typeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,6 +42,10 @@ function CreateTask() {
         value={value}
         onChange={typeHandler}
       />
+      {error && (
+        <p className="text-red-600 font-bold text-center">Write something!</p>
+      )}
+      <DateCalendar value={date} onChange={(newDate) => setDate(newDate)} />
       <ModalDismissButton>
         <button
           type="submit"
@@ -44,10 +54,6 @@ function CreateTask() {
           Add
         </button>
       </ModalDismissButton>
-
-      {error && (
-        <p className="text-red-600 font-bold text-center">Write something!</p>
-      )}
     </form>
   );
 }

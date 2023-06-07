@@ -2,14 +2,16 @@ import { ModalDismissButton } from '../context/ModalContext';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useDeleteTaskMutation } from '../todoSlice';
+import { useSelector } from 'react-redux';
 
 function Delete({ id }: { id: string }) {
+  const currentDate = useSelector((state: any) => state?.date?.date);
   const { currentUser: user } = useContext(AuthContext);
   const [deleteTask] = useDeleteTaskMutation();
 
   const deleteHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    deleteTask({ user: user?.uid, id });
+    deleteTask({ user: user?.uid, id, date: currentDate });
   };
 
   return (

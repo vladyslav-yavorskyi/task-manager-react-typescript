@@ -1,7 +1,6 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
 import { ITodo } from './models';
 import {
-  Timestamp,
   addDoc,
   collection,
   deleteDoc,
@@ -14,15 +13,16 @@ export const firestoreApi = createApi({
   baseQuery: fakeBaseQuery(),
   tagTypes: ['Task'],
   endpoints: (builder) => ({
-    fetchAllTasks: builder.query<ITodo[], void>({
-      async queryFn(user) {
+    fetchAllTasks: builder.query({
+      async queryFn({ user, date }) {
         try {
-          const ref = collection(db, `accounts/${user}/tasks`);
+          const ref = collection(db, `accounts/${user}/${date}`);
           const querySnapshot = await getDocs(ref);
           let allTasks: ITodo[] = [];
           querySnapshot?.forEach((doc) => {
             allTasks.push({ idTask: doc.id, ...doc?.data() } as ITodo);
           });
+          console.log(date);
 
           return { data: allTasks };
         } catch (error: any) {
@@ -33,13 +33,13 @@ export const firestoreApi = createApi({
       providesTags: ['Task'],
     }),
     createNewTask: builder.mutation({
-      async queryFn({ user, value }) {
+      async queryFn({ user, value, date }) {
         try {
-          const taskRef = collection(db, `accounts/${user}/tasks`);
+          const taskRef = collection(db, `accounts/${user}/${date}`);
           await addDoc(taskRef, {
             title: value,
             completed: false,
-            time: new Date(Timestamp.now().seconds * 1000).toLocaleString(),
+            time: date,
           });
 
           return { data: null };
@@ -51,10 +51,9 @@ export const firestoreApi = createApi({
       invalidatesTags: ['Task'],
     }),
     deleteTask: builder.mutation({
-      async queryFn({ user, id }) {
+      async queryFn({ user, id, date }) {
         try {
-          const taskRef = doc(db, `accounts/${user}/tasks/${id}`);
-
+          const taskRef = doc(db, `accounts/${user}/${date}/${id}`);
           await deleteDoc(taskRef);
         } catch (e) {
           console.error(e);

@@ -6,6 +6,7 @@ import { checked_icon, del_icon } from '../icons';
 import { Modal, ModalContents, ModalOpenButton } from '../context/ModalContext';
 import Delete from './Delete';
 import { AuthContext } from '../context/AuthContext';
+import { useSelector } from 'react-redux';
 
 interface TaskProps {
   task: ITodo;
@@ -14,17 +15,20 @@ interface TaskProps {
 function Task({ task }: TaskProps) {
   const [done, setDone] = useState<boolean>(task.completed);
   const { currentUser: user } = useContext(AuthContext);
+  const currentDate = useSelector((state: any) => state?.date?.date);
 
   const clickHandler = async () => {
     try {
-      const taskRef = doc(db, `accounts/${user?.uid}/tasks/${task.idTask}`);
+      const taskRef = doc(
+        db,
+        `accounts/${user?.uid}/${currentDate}/${task.idTask}`
+      );
 
       const getCompleted = !(await getDoc(taskRef)).data()?.completed;
 
       await updateDoc(taskRef, {
         completed: getCompleted,
       });
-
       setDone(getCompleted);
     } catch (e) {
       console.error(e);
@@ -37,7 +41,7 @@ function Task({ task }: TaskProps) {
   return (
     <div className="container flex border-2 justify-between border-black py-1 rounded w-63 my-2 mx-4">
       <h1 className={textClasses.join(' ')}>{task.title}</h1>
-      <p className={textClasses.join(' ')}>{task.time}</p>
+
       <div className="buttons">
         <button
           type="button"

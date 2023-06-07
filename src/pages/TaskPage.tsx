@@ -5,16 +5,27 @@ import { ModalOpenButton, ModalContents } from '../context/ModalContext';
 import { useFetchAllTasksQuery } from '../todoSlice';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { useSelector } from 'react-redux';
+import Date from '../components/Date';
 
 function TaskPage() {
+  const currentDate = useSelector((state: any) => state?.date?.date);
   const { currentUser: user } = useContext(AuthContext);
-  const { data, isLoading, isError } = useFetchAllTasksQuery(user.uid);
+  console.log(currentDate);
+
+  const { data, isLoading, isError } = useFetchAllTasksQuery({
+    user: user.uid,
+    date: currentDate,
+  });
 
   return (
     <div className="container mx-auto max-w-2xl pt-5">
-      <h1 className="text-center font-bold text-5xl my-10">TO-DO App</h1>
+      <h1 className="text-center font-bold text-5xl my-10">YOUR TASKS</h1>
+      <Date />
       <>
-        {isError && <p>Something went wrong.... :( {isError}</p>}
+        {isError && <p>Something went wrong.... {isError}</p>}
 
         {!isLoading &&
           data?.map((task) => <Task task={task} key={task.idTask} />)}
@@ -27,7 +38,9 @@ function TaskPage() {
           </button>
         </ModalOpenButton>
         <ModalContents title="Add new task">
-          <CreateTask />
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <CreateTask />
+          </LocalizationProvider>
         </ModalContents>
       </Modal>
     </div>
