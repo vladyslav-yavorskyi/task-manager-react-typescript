@@ -5,7 +5,9 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
   getDocs,
+  updateDoc,
 } from 'firebase/firestore';
 import { db } from './app/.firebase';
 
@@ -22,7 +24,6 @@ export const firestoreApi = createApi({
           querySnapshot?.forEach((doc) => {
             allTasks.push({ idTask: doc.id, ...doc?.data() } as ITodo);
           });
-          console.log(date);
 
           return { data: allTasks };
         } catch (error: any) {
@@ -62,6 +63,24 @@ export const firestoreApi = createApi({
       },
       invalidatesTags: ['Task'],
     }),
+    updateCheck: builder.mutation({
+      async queryFn({ user, date, id, setDone }) {
+        try {
+          const taskRef = doc(db, `accounts/${user}/${date}/${id}`);
+
+          const getCompleted = !(await getDoc(taskRef)).data()?.completed;
+
+          await updateDoc(taskRef, {
+            completed: getCompleted,
+          });
+          setDone(getCompleted);
+        } catch (e) {
+          console.error(e);
+        }
+        return { data: null };
+      },
+      invalidatesTags: ['Task'],
+    }),
   }),
 });
 
@@ -69,4 +88,5 @@ export const {
   useFetchAllTasksQuery,
   useCreateNewTaskMutation,
   useDeleteTaskMutation,
+  useUpdateCheckMutation,
 } = firestoreApi;

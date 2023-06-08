@@ -13,7 +13,6 @@ import Date from '../components/Date';
 function TaskPage() {
   const currentDate = useSelector((state: any) => state?.date?.date);
   const { currentUser: user } = useContext(AuthContext);
-  console.log(currentDate);
 
   const { data, isLoading, isError } = useFetchAllTasksQuery({
     user: user.uid,

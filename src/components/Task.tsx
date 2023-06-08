@@ -1,12 +1,11 @@
 import { useContext, useState } from 'react';
 import { ITodo } from '../models';
-import { db } from '../app/.firebase';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { checked_icon, del_icon } from '../icons';
 import { Modal, ModalContents, ModalOpenButton } from '../context/ModalContext';
 import Delete from './Delete';
 import { AuthContext } from '../context/AuthContext';
 import { useSelector } from 'react-redux';
+import { useUpdateCheckMutation } from '../todoSlice';
 
 interface TaskProps {
   task: ITodo;
@@ -14,27 +13,20 @@ interface TaskProps {
 
 function Task({ task }: TaskProps) {
   const [done, setDone] = useState<boolean>(task.completed);
+
   const { currentUser: user } = useContext(AuthContext);
   const currentDate = useSelector((state: any) => state?.date?.date);
+  const [updateCheck] = useUpdateCheckMutation();
 
-  const clickHandler = async () => {
-    try {
-      const taskRef = doc(
-        db,
-        `accounts/${user?.uid}/${currentDate}/${task.idTask}`
-      );
-
-      const getCompleted = !(await getDoc(taskRef)).data()?.completed;
-
-      await updateDoc(taskRef, {
-        completed: getCompleted,
-      });
-      setDone(getCompleted);
-    } catch (e) {
-      console.error(e);
-    }
+  const clickHandler = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    updateCheck({
+      user: user?.uid,
+      date: currentDate,
+      id: task.idTask,
+      setDone,
+    });
   };
-
   const textClassName = done ? 'line-through' : '';
   const textClasses = ['font-bold px-5', textClassName];
 
