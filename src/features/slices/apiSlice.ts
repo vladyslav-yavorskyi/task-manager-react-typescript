@@ -1,5 +1,5 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
-import { ITodo } from './models';
+import { ITodo } from '../../models';
 import {
   addDoc,
   collection,
@@ -9,7 +9,7 @@ import {
   getDocs,
   updateDoc,
 } from 'firebase/firestore';
-import { db } from './app/.firebase';
+import { db } from '../../app/.firebase';
 
 export const firestoreApi = createApi({
   baseQuery: fakeBaseQuery(),

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { decrementDay, incrementDay } from '../features/dateSlice';
+import { decrementDay, incrementDay } from '../features/slices/dateSlice';
 
 function Date() {
   const currentDate = useSelector((state: any) => state?.date?.date);

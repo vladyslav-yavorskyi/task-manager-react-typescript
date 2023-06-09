@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { useCreateNewTaskMutation } from '../todoSlice';
+import { useCreateNewTaskMutation } from '../features/slices/apiSlice';
 import { ModalDismissButton } from '../context/ModalContext';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import dayjs, { Dayjs } from 'dayjs';
@@ -34,7 +34,7 @@ function CreateTask() {
   };
 
   return (
-    <form onSubmit={submitHandler} className="my-4">
+    <form onSubmit={submitHandler} className="my-4 flex flex-col items-center">
       <input
         type="text"
         className="outline-none py-2 px-4"

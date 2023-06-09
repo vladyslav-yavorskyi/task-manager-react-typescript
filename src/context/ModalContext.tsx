@@ -59,7 +59,7 @@ function ModalContents({ title, children, ...props }: ModalContentsProps) {
           <button className="py-3 px-3 ">x</button>
         </ModalDismissButton>
       </div>
-      <h3 className="text-center">{title}</h3>
+      <h3 className="text-center font-bold">{title}</h3>
       {children}
     </ModalContentsBase>
   );

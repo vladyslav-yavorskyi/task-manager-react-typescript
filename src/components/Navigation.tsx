@@ -15,9 +15,17 @@ function Navigation() {
 
   return (
     <nav className="h-[50px] flex justify-between px-5 bg-gray-500 items-center text-white">
-      <span>TO-DO APP</span>
+      <h1 className="font-bold">TASK MANAGER</h1>
       <span>
-        <Link to="/">About</Link>
+        <Link to="/">
+          <button
+            type="button"
+            className="inline-block rounded-full border-2 border-info px-6 pb-[6px] pt-2 text-xs font-medium uppercase leading-normal text-info transition duration-150 ease-in-out hover:border-info-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-info-600 focus:border-info-600 focus:text-info-600 focus:outline-none focus:ring-0 active:border-info-700 active:text-info-700 dark:hover:bg-neutral-100 dark:hover:bg-opacity-10"
+            data-te-ripple-init
+          >
+            About
+          </button>
+        </Link>
         {isSignedIn ? (
           <>
             <Link to="/tasks" className="mx-2">

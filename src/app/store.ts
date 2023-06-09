@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { firestoreApi } from '../todoSlice';
-import dateReducer from '../features/dateSlice';
+import { firestoreApi } from '../features/slices/apiSlice';
+import dateReducer from '../features/slices/dateSlice';
 
 export const store = configureStore({
   reducer: {

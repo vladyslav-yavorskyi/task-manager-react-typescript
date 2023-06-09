@@ -5,7 +5,7 @@ import { Modal, ModalContents, ModalOpenButton } from '../context/ModalContext';
 import Delete from './Delete';
 import { AuthContext } from '../context/AuthContext';
 import { useSelector } from 'react-redux';
-import { useUpdateCheckMutation } from '../todoSlice';
+import { useUpdateCheckMutation } from '../features/slices/apiSlice';
 
 interface TaskProps {
   task: ITodo;

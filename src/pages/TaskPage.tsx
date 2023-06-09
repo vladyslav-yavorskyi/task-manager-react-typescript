@@ -2,7 +2,7 @@ import Task from '../components/Task';
 import { Modal } from '../context/ModalContext';
 import CreateTask from '../components/CreateTask';
 import { ModalOpenButton, ModalContents } from '../context/ModalContext';
-import { useFetchAllTasksQuery } from '../todoSlice';
+import { useFetchAllTasksQuery } from '../features/slices/apiSlice';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { LocalizationProvider } from '@mui/x-date-pickers';
