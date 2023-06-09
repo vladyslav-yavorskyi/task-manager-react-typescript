@@ -1,4 +1,4 @@
-WELCOME TO MY TASK MANAGER📂✔️
+WELCOME TO MY TO-DO MANAGER📂✔️
 
 In this project I have used React 📘 and Typescript. 🌐
 
