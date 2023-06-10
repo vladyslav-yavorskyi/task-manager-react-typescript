@@ -6,6 +6,7 @@ import Delete from './Delete';
 import { AuthContext } from '../context/AuthContext';
 import { useSelector } from 'react-redux';
 import { useUpdateCheckMutation } from '../features/slices/apiSlice';
+import Edit from './Edit';
 
 interface TaskProps {
   task: ITodo;
@@ -13,7 +14,6 @@ interface TaskProps {
 
 function Task({ task }: TaskProps) {
   const [done, setDone] = useState<boolean>(task.completed);
-
   const { currentUser: user } = useContext(AuthContext);
   const currentDate = useSelector((state: any) => state?.date?.date);
   const [updateCheck] = useUpdateCheckMutation();
@@ -27,13 +27,13 @@ function Task({ task }: TaskProps) {
       setDone,
     });
   };
+
   const textClassName = done ? 'line-through' : '';
   const textClasses = ['font-bold px-5', textClassName];
 
   return (
     <div className="container flex border-2 justify-between border-black py-1 rounded w-63 my-2 mx-4">
-      <h1 className={textClasses.join(' ')}>{task.title}</h1>
-
+      <Edit title={task.title} taskId={task.idTask} />
       <div className="buttons">
         <button
           type="button"

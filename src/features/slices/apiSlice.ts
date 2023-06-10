@@ -81,6 +81,20 @@ export const firestoreApi = createApi({
       },
       invalidatesTags: ['Task'],
     }),
+    updateTitle: builder.mutation({
+      async queryFn({ user, date, id, newTitle }) {
+        try {
+          const taskRef = doc(db, `accounts/${user.uid}/${date}/${id}`);
+          await updateDoc(taskRef, {
+            title: newTitle,
+          });
+        } catch (e) {
+          console.error(e);
+        }
+
+        return { data: null };
+      },
+    }),
   }),
 });
 
@@ -89,4 +103,5 @@ export const {
   useCreateNewTaskMutation,
   useDeleteTaskMutation,
   useUpdateCheckMutation,
+  useUpdateTitleMutation,
 } = firestoreApi;
