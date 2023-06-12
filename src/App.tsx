@@ -10,7 +10,7 @@ export function App() {
   const user = useContext(AuthContext);
 
   return (
-    <div>
+    <div className="body-font font-poppins">
       {!user?.pending ? (
         <>
           <Navigation />

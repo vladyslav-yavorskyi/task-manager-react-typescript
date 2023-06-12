@@ -14,8 +14,8 @@ function Navigation() {
   };
 
   return (
-    <nav className="h-[50px] flex justify-between px-5 bg-gray-500 items-center text-white">
-      <h1 className="font-bold">TASK MANAGER</h1>
+    <nav className="h-[50px] flex justify-between px-5 bg-zinc-100 items-center text-stone-700">
+      <h1 className="font-bold">TO-DO MANAGER</h1>
       <span>
         <Link to="/">
           <button

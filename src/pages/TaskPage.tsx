@@ -9,9 +9,10 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useSelector } from 'react-redux';
 import Date from '../components/Date';
+import { RootState } from '../app/store';
 
 function TaskPage() {
-  const currentDate = useSelector((state: any) => state?.date?.date);
+  const currentDate = useSelector((state: RootState) => state.date.date);
   const { currentUser: user } = useContext(AuthContext);
 
   const { data, isLoading, isError } = useFetchAllTasksQuery({
@@ -26,8 +27,14 @@ function TaskPage() {
       <>
         {isError && <p>Something went wrong.... {isError}</p>}
 
-        {!isLoading &&
-          data?.map((task) => <Task task={task} key={task.idTask} />)}
+        {data?.length ? (
+          !isLoading &&
+          data?.map((task) => <Task task={task} key={task.idTask} />)
+        ) : (
+          <p className="text-gray-400/[.60] text-center mt-10">
+            You don't have any task on that day :){' '}
+          </p>
+        )}
       </>
 
       <Modal>

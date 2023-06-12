@@ -7,15 +7,16 @@ import { AuthContext } from '../context/AuthContext';
 import { useSelector } from 'react-redux';
 import { useUpdateCheckMutation } from '../features/slices/apiSlice';
 import Edit from './Edit';
+import { RootState } from '../app/store';
 
 interface TaskProps {
   task: ITodo;
 }
 
 function Task({ task }: TaskProps) {
+  const currentDate = useSelector((state: RootState) => state.date.date);
   const [done, setDone] = useState<boolean>(task.completed);
   const { currentUser: user } = useContext(AuthContext);
-  const currentDate = useSelector((state: any) => state?.date?.date);
   const [updateCheck] = useUpdateCheckMutation();
 
   const clickHandler = async (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -29,11 +30,18 @@ function Task({ task }: TaskProps) {
   };
 
   const textClassName = done ? 'line-through' : '';
-  const textClasses = ['font-bold px-5', textClassName];
+  const textClasses = [
+    'font-bold px-5 outline-0 outline outline-transparent',
+    textClassName,
+  ];
 
   return (
     <div className="container flex border-2 justify-between border-black py-1 rounded w-63 my-2 mx-4">
-      <Edit title={task.title} taskId={task.idTask} />
+      <Edit
+        textClass={textClasses}
+        title={task.title}
+        taskId={String(task.idTask)}
+      />
       <div className="buttons">
         <button
           type="button"

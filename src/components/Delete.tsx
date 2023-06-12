@@ -3,9 +3,10 @@ import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useDeleteTaskMutation } from '../features/slices/apiSlice';
 import { useSelector } from 'react-redux';
+import { RootState } from '../app/store';
 
 function Delete({ id }: { id: string }) {
-  const currentDate = useSelector((state: any) => state?.date?.date);
+  const currentDate = useSelector((state: RootState) => state.date.date);
   const { currentUser: user } = useContext(AuthContext);
   const [deleteTask] = useDeleteTaskMutation();
 

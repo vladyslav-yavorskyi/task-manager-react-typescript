@@ -1,18 +1,26 @@
 import { useContext, useRef } from 'react';
-import ContentEditable from 'react-contenteditable';
+import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import { useUpdateTitleMutation } from '../features/slices/apiSlice';
 import { useSelector } from 'react-redux';
 import { AuthContext } from '../context/AuthContext';
+import { RootState } from '../app/store';
 
-function Edit({ title, taskId }: any) {
-  const currentDate = useSelector((state: any) => state?.date?.date);
+interface EditProps {
+  textClass: string[];
+  title: string;
+  taskId: string;
+}
+
+function Edit({ textClass, title, taskId }: EditProps) {
+  const currentDate = useSelector((state: RootState) => state.date.date);
   const { currentUser: user } = useContext(AuthContext);
-  const text = useRef(title);
   const [updateTitle] = useUpdateTitleMutation();
+  const text = useRef(title);
 
-  const handleChange = (event: any) => {
+  const handleChange = (event: ContentEditableEvent) => {
     text.current = event.target.value;
   };
+
   const handleBlur = () => {
     updateTitle({
       user,
@@ -27,9 +35,7 @@ function Edit({ title, taskId }: any) {
       onChange={handleChange}
       onBlur={handleBlur}
       html={text.current}
-      style={{
-        outline: '0px solid transparent',
-      }}
+      className={textClass.join(' ')}
     />
   );
 }
