@@ -94,6 +94,7 @@ export const firestoreApi = createApi({
 
         return { data: null };
       },
+      invalidatesTags: ['Task'],
     }),
   }),
 });
